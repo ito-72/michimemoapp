@@ -1,5 +1,5 @@
 // GASの送信先URL（必要に応じて書き換えるだけでOK）
-const GAS_URL = "https://script.google.com/macros/s/AKfycbxmBc43KMFaKgbHuvzoJlh27qMhruM4PEhRJu1Tu-CMh3YVcnMLgsH0kEnhNn-fFHOC/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycby8UGsJ_65JvZwD3S5xudzjFbFnwKYxYDe6OutmHvHa4iprCcdPwkxaxn0GGuS9NLBW/exec";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
