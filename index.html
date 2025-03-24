@@ -161,9 +161,21 @@
                       const dBtn = document.createElement("button");
                       dBtn.textContent = `${day}日`;
                       dBtn.className = "tab-button";
-                      dBtn.addEventListener("click", () => {
+                      dBtn.addEventListener("click", async () => {
                         updateSelectedTab(dayTabs, dBtn);
-                        resultBox.textContent = `✅ ${day}日の合計距離を取得予定（今後）`;
+                        resultBox.textContent = `📏 ${day}日の距離を集計中...`;
+
+                        const res = await fetch("/api/getTotalDistanceForDay", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({
+                            mode: "getTotalDistanceForDay",
+                            sheetName: `${selectedYear}年${selectedMonth}月${selectedPeriod}`,
+                            day: day
+                          })
+                        });
+                        const result = await res.json();
+                        resultBox.textContent = `📅 ${selectedYear}年${selectedMonth}月${day}日の走行距離：${result.total} km`;
                       });
                       dayTabs.appendChild(dBtn);
                     });
