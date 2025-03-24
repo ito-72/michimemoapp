@@ -1,6 +1,6 @@
 // /api/getSheetNames.js
 
-const GAS_URL = "https://script.google.com/macros/s/AKfycbxUj6yfTaGZ-8oqgiago_eLw1QJMShBhIZ4g_8OIqZhJ8GKCFv-vFpYY06LJXYq2yJk/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxiTW26obkZBXIL7xjKgaCkNN_gs6ANx_VZGRleVxJPy1gNPFk2QUu1Cx2W366_UCCp/exec";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
