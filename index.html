@@ -143,7 +143,7 @@
                   pBtn.addEventListener("click", async () => {
                     selectedPeriod = period;
                     updateSelectedTab(periodTabs, pBtn);
-                    resultBox.textContent = `📊 ${year}年${month}月${period}日の期間が選択されました`;
+                    resultBox.textContent = `📊 ${year}年${month}月${period}日の期間が選択されました（取得中...）`;
 
                     // ✅ 日タブ生成（getAvailableDays.js 経由）
                     const sheetName = `${year}年${month}月${period}`;
@@ -164,7 +164,6 @@
                       dBtn.addEventListener("click", () => {
                         updateSelectedTab(dayTabs, dBtn);
                         resultBox.textContent = `✅ ${day}日の合計距離を取得予定（今後）`;
-                        // 今後: 距離合計取得 → 表示処理へ
                       });
                       dayTabs.appendChild(dBtn);
                     });
