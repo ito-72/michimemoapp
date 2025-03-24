@@ -192,7 +192,7 @@
         console.error("❌ エラー:", err);
         resultBox.textContent = "シート取得に失敗しました。";
       }
-    });
+    };
 
     function updateSelectedTab(container, selectedButton) {
       [...container.children].forEach(btn => btn.classList.remove("selected"));
