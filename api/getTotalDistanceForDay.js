@@ -1,44 +1,29 @@
-// /api/getTotalDistanceForDay.js
+// /api/getAvailableDays.js
 
-const GAS_URL = "https://script.google.com/macros/s/AKfycbxvvbvKXUAFR3wRnp9KBNLEt4V8WWANH1-Pc4gdFqgIO0I_CMtO9d3URq5qDKVMXbRh/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxlsibzExm6gm76tVjWq9X4MAnRqKnIcw4tokxCgVHBxlLixcokj8Y39C4XXxpaQw_I/exec";
 
 export default async function handler(req, res) {
-  // ステップ1: POSTメソッドでなければエラー
   if (req.method !== "POST") {
-    return res.status(405).json({ message: "POSTメソッドを使用してください" });
+    return res.status(405).json({ message: "POSTメソッドで送信してください" });
   }
 
-  // ステップ2: 必要なパラメータ（sheetName, day）を確認
-  const { sheetName, day } = req.body;
-  if (!sheetName || day === undefined) {
-    return res.status(400).json({ message: "sheetName または day が不足しています" });
+  const { sheetName } = req.body;
+  if (!sheetName) {
+    return res.status(400).json({ message: "sheetNameが指定されていません" });
   }
 
   try {
-    // ステップ3: GASに対してモード付きでPOST
     const gasRes = await fetch(GAS_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        mode: "getTotalDistanceForDay",
-        sheetName,
-        day
-      })
+      body: JSON.stringify({ mode: "getAvailableDays", sheetName })
     });
 
-    // ステップ4: GASの返答をJSONとして解析
     const result = await gasRes.json();
-
-    // ステップ5: 成功時はtotalをそのまま返却
-    return res.status(200).json({
-      total: result.total
-    });
+    return res.status(200).json({ days: result.days });
 
   } catch (error) {
-    console.error("GAS通信エラー:", error);
-    return res.status(500).json({
-      message: "GASとの通信に失敗しました",
-      error: error.message
-    });
+    console.error("GAS連携エラー:", error);
+    return res.status(500).json({ message: "GASとの通信に失敗", error: error.message });
   }
 }
