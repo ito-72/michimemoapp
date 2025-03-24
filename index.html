@@ -2,31 +2,19 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>みちめも</title>
-  <link rel="stylesheet" href="style.css">
-
-  <!-- ✅ PWA用メタタグ（iOS専用） -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="みちめも">
-  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <title>位置情報アプリ</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-  <!-- ✅ ボタンたち（順番調整済） -->
+  <h1>現在地と走行距離記録</h1>
+
+  <!-- ✅ ボタンたち -->
   <button id="postButton">現在地を送信</button>
-
-  <!-- ✅ 結果表示ボックス -->
-  <div id="resultBox">ここに結果が表示されます</div>
-
   <button id="distanceButton">今週の距離を記載</button>
   <button id="showDistanceByDay">該当日の距離を表示</button>
 
-  <!-- ✅ API使用状況表示 -->
-  <div id="apiUsageInfo">API使用状況を取得中...</div>
+  <!-- ✅ 結果表示ボックス -->
+  <div id="resultBox">ここに結果が表示されます</div>
 
   <!-- ✅ タブエリア -->
   <div id="tabArea">
@@ -36,20 +24,14 @@
     <div id="dayTabs" class="tab-group"></div>
   </div>
 
+  <!-- ✅ API使用状況表示 -->
+  <div id="apiUsageInfo" style="margin-top: 30px;">API使用状況を取得中...</div>
+
   <script>
     let sheetData = [];
     let selectedYear = null;
     let selectedMonth = null;
     let selectedPeriod = null;
-
-    // ✅ トースト通知
-    function showToast(message) {
-      const toast = document.createElement("div");
-      toast.className = "toast";
-      toast.textContent = message;
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 2500);
-    }
 
     // ✅ 現在地を送信
     document.getElementById("postButton").addEventListener("click", async () => {
@@ -73,7 +55,6 @@
 
           const result = await res.json();
           resultBox.textContent = `📍 ${result.message}`;
-          showToast("送信しました ✅");
           updateApiUsageDisplay();
         },
         (err) => {
@@ -196,7 +177,8 @@
                           })
                         });
 
-                        const result = await res.json();
+                        const result = await res.json(); // ← ✅ 修正：text() → json()
+                        console.log("✅ GASからの距離:", result);
                         resultBox.textContent = `${selectedYear}年${selectedMonth}月${day}日の走行距離：${result.total} km`;
                       });
                       dayTabs.appendChild(dBtn);
@@ -212,6 +194,7 @@
         });
 
         resultBox.textContent = "✅ 年タブを生成しました";
+
       } catch (err) {
         console.error("❌ エラー:", err);
         resultBox.textContent = "シート取得に失敗しました。";
@@ -223,6 +206,7 @@
       selectedButton.classList.add("selected");
     }
 
+    // ✅ API使用状況を取得・表示
     async function updateApiUsageDisplay() {
       try {
         const res = await fetch("/api/checkApiUsage", { method: "POST" });
