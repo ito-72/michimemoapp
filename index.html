@@ -2,18 +2,18 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>位置情報テスト</title>
+  <title>位置情報POSTテスト</title>
 </head>
 <body>
-  <h1>現在地テスト</h1>
+  <h1>現在地をサーバーにPOST</h1>
 
-  <button id="locButton">現在地を取得</button>
+  <button id="postButton">現在地を送信</button>
 
-  <div id="locResult">← ここに位置情報が表示されます</div>
+  <div id="resultArea">← ここにサーバーからの返答が出る</div>
 
   <script>
-    document.getElementById("locButton").addEventListener("click", async () => {
-      const resultArea = document.getElementById("locResult");
+    document.getElementById("postButton").addEventListener("click", async () => {
+      const resultArea = document.getElementById("resultArea");
 
       if (!navigator.geolocation) {
         resultArea.textContent = "このブラウザでは位置情報が使えません。";
@@ -21,13 +21,24 @@
       }
 
       navigator.geolocation.getCurrentPosition(
-        (pos) => {
+        async (pos) => {
           const lat = pos.coords.latitude;
           const lng = pos.coords.longitude;
-          resultArea.textContent = `緯度: ${lat}、経度: ${lng}`;
+
+          // サーバーにPOST送信
+          const res = await fetch("/api/recordLocation", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ lat, lng })
+          });
+
+          const result = await res.json();
+          resultArea.textContent = `サーバー返答: ${result.message}`;
         },
         (err) => {
-          resultArea.textContent = `位置情報の取得に失敗しました (${err.message})`;
+          resultArea.textContent = `位置情報の取得に失敗: ${err.message}`;
         }
       );
     });
