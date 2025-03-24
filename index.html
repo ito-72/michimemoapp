@@ -168,15 +168,19 @@
                         resultBox.textContent = `📏 ${day}日の距離を集計中...`;
 
                         const res = await fetch("/api/getTotalDistanceForDay", {
-                          method: "POST",
-                          headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify({
-                            sheetName: `${selectedYear}年${selectedMonth}月${selectedPeriod}`,
-                            day: String(day).replace("日", "")
-                          })
-                        });
-                        const result = await res.json();
-                        resultBox.textContent = `📅 ${selectedYear}年${selectedMonth}月${day}日の走行距離：${result.total} km`;
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    mode: "getTotalDistanceForDay",
+    sheetName: `${selectedYear}年${selectedMonth}月${selectedPeriod.replace("日", "")}`,
+    day: String(day).replace("日", "")
+  })
+});
+
+const text = await res.text();
+console.log("✅ GASからの距離:", text);
+resultBox.textContent = `${selectedYear}年${selectedMonth}月${day}日の走行距離：${text} km`;
+
                       });
                       dayTabs.appendChild(dBtn);
                     });
