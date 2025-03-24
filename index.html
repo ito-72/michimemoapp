@@ -2,21 +2,53 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>位置情報POSTテスト</title>
+  <title>位置情報アプリ</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #resultBox {
+      margin-top: 30px;
+      padding: 15px;
+      border: 2px solid #4caf50;
+      border-radius: 8px;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+      background-color: #f0fff0;
+      font-size: 18px;
+    }
+  </style>
 </head>
 <body>
-  <h1>現在地をサーバーにPOST</h1>
+  <h1>現在地と走行距離記録</h1>
 
+  <!-- 既存の位置記録ボタン -->
   <button id="postButton">現在地を送信</button>
 
-  <div id="resultArea">← ここにサーバーからの返答が出る</div>
+  <!-- ✅ 新しく追加する今週の距離計算ボタン -->
+  <button id="distanceButton">今週の距離を表示</button>
+
+  <!-- ✅ 結果表示用のスタイリング済みボックス -->
+  <div id="resultBox">ここに結果が表示されます</div>
 
   <script>
+    // 位置情報記録ボタン（既存）
     document.getElementById("postButton").addEventListener("click", async () => {
-      const resultArea = document.getElementById("resultArea");
+      const resultBox = document.getElementById("resultBox");
 
       if (!navigator.geolocation) {
-        resultArea.textContent = "このブラウザでは位置情報が使えません。";
+        resultBox.textContent = "このブラウザでは位置情報が使えません。";
         return;
       }
 
@@ -25,7 +57,6 @@
           const lat = pos.coords.latitude;
           const lng = pos.coords.longitude;
 
-          // サーバーにPOST送信
           const res = await fetch("/api/recordLocation", {
             method: "POST",
             headers: {
@@ -35,12 +66,25 @@
           });
 
           const result = await res.json();
-          resultArea.textContent = `サーバー返答: ${result.message}`;
+          resultBox.textContent = `📍 ${result.message}`;
         },
         (err) => {
-          resultArea.textContent = `位置情報の取得に失敗: ${err.message}`;
+          resultBox.textContent = `位置情報の取得に失敗: ${err.message}`;
         }
       );
+    });
+
+    // ✅ 今週の距離表示ボタン（新規）
+    document.getElementById("distanceButton").addEventListener("click", async () => {
+      const resultBox = document.getElementById("resultBox");
+      resultBox.textContent = "計算中です...";
+
+      const res = await fetch("/api/calculateWeeklyDistance", {
+        method: "POST"
+      });
+
+      const result = await res.json();
+      resultBox.textContent = `🚴‍♀️ ${result.message}`;
     });
   </script>
 </body>
