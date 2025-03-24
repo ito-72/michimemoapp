@@ -1,11 +1,10 @@
-/* ===== 全体レイアウト ===== */
+/* ======== 全体レイアウト ======== */
 body {
   font-family: Arial, sans-serif;
-  background-color: #eaeaea; /* ライトモードでも少しグレーに */
+  background-color: #f4f4f4;
   color: #333;
   text-align: center;
-  padding: env(safe-area-inset-top, 20px) 20px env(safe-area-inset-bottom, 20px);
-  margin: 0;
+  padding: 20px;
 }
 
 h1 {
@@ -13,12 +12,7 @@ h1 {
   margin-bottom: 20px;
 }
 
-html, body {
-  height: 100%;
-  overflow-x: hidden;
-}
-
-/* ===== 結果表示ボックス ===== */
+/* ======== 結果表示ボックス ======== */
 #resultBox,
 #distanceResult {
   margin-top: 30px;
@@ -37,7 +31,7 @@ html, body {
   background-color: #e3f2fd;
 }
 
-/* ===== タブエリア ===== */
+/* ======== タブエリア ======== */
 .tab-group {
   display: flex;
   justify-content: center;
@@ -68,7 +62,7 @@ html, body {
   border-color: #fbc02d;
 }
 
-/* ===== ボタンスタイル ===== */
+/* ======== 丸ボタンスタイル ======== */
 #postButton {
   background: linear-gradient(135deg, #4CAF50, #81C784);
   color: white;
@@ -82,18 +76,6 @@ html, body {
   margin: 10px;
 }
 
-#distanceButton {
-  background: linear-gradient(135deg, #FF9800, #FFB74D); /* オレンジ系 */
-  color: white;
-  font-size: 16px;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 999px;
-  cursor: pointer;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease-in-out, box-shadow 0.3s;
-  margin: 10px;
-}
 
 #showDistanceByDay {
   background: linear-gradient(135deg, #03A9F4, #81D4FA);
@@ -111,72 +93,4 @@ html, body {
 button:hover {
   transform: translateY(-3px);
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
-}
-
-button:active {
-  transform: scale(0.96);
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
-}
-
-/* ===== トースト通知 ===== */
-.toast {
-  position: fixed;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #323232;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  box-shadow: 0px 2px 6px rgba(0,0,0,0.3);
-  font-size: 16px;
-  opacity: 0;
-  animation: fadeInOut 2.5s ease-in-out forwards;
-  z-index: 1000;
-}
-
-@keyframes fadeInOut {
-  0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
-  10% { opacity: 1; transform: translateX(-50%) translateY(0); }
-  90% { opacity: 1; transform: translateX(-50%) translateY(0); }
-  100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
-}
-
-/* ===== ダークモード対応 ===== */
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: #121212;
-    color: #ffffff;
-  }
-
-  #resultBox,
-  #distanceResult {
-    background-color: #1e1e1e;
-    border-color: #666;
-    color: #fff;
-  }
-
-  .tab-button {
-    background: linear-gradient(135deg, #444, #333);
-    color: #fff;
-  }
-
-  .tab-button:hover {
-    background: linear-gradient(135deg, #555, #444);
-  }
-
-  .tab-button.selected {
-    background: linear-gradient(135deg, #FFD600, #FFB300);
-    color: black;
-  }
-
-  #postButton,
-  #distanceButton,
-  #showDistanceByDay {
-    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
-  }
-
-  .toast {
-    background-color: #444;
-  }
 }
