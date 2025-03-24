@@ -55,7 +55,7 @@
 
           const result = await res.json();
           resultBox.textContent = `📍 ${result.message}`;
-          updateApiUsageDisplay(); // 送信後に使用回数を更新
+          updateApiUsageDisplay();
         },
         (err) => {
           resultBox.textContent = `位置情報の取得に失敗: ${err.message}`;
@@ -74,10 +74,10 @@
 
       const result = await res.json();
       resultBox.textContent = `🚴‍♀️ ${result.message}`;
-      updateApiUsageDisplay(); // 使用後に更新
+      updateApiUsageDisplay();
     });
 
-    // ✅ 日タブの生成
+    // ✅ 日タブの生成と表示
     document.getElementById("showDistanceByDay").addEventListener("click", async () => {
       const resultBox = document.getElementById("resultBox");
       resultBox.textContent = "シート一覧を取得中...";
@@ -168,19 +168,18 @@
                         resultBox.textContent = `📏 ${day}日の距離を集計中...`;
 
                         const res = await fetch("/api/getTotalDistanceForDay", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    mode: "getTotalDistanceForDay",
-    sheetName: `${selectedYear}年${selectedMonth}月${selectedPeriod.replace("日", "")}`,
-    day: String(day).replace("日", "")
-  })
-});
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({
+                            mode: "getTotalDistanceForDay",
+                            sheetName: `${selectedYear}年${selectedMonth}月${selectedPeriod.replace("日", "")}`,
+                            day: String(day).replace("日", "")
+                          })
+                        });
 
-const text = await res.text();
-console.log("✅ GASからの距離:", text);
-resultBox.textContent = `${selectedYear}年${selectedMonth}月${day}日の走行距離：${text} km`;
-
+                        const result = await res.json(); // ← ✅ 修正：text() → json()
+                        console.log("✅ GASからの距離:", result);
+                        resultBox.textContent = `${selectedYear}年${selectedMonth}月${day}日の走行距離：${result.total} km`;
                       });
                       dayTabs.appendChild(dBtn);
                     });
@@ -220,7 +219,6 @@ resultBox.textContent = `${selectedYear}年${selectedMonth}月${day}日の走行
       }
     }
 
-    // ✅ ページ読み込み時に表示更新
     window.onload = updateApiUsageDisplay;
   </script>
 </body>
