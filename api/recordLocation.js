@@ -12,11 +12,18 @@ export default async function handler(req, res) {
     return res.status(400).json({ message: "緯度または経度が不足しています" });
   }
 
-  // 現在日時（日本時間ベース）
+  // 日本時間（JST）で現在日時を取得
   const now = new Date();
   const month = now.getMonth() + 1;
   const day = now.getDate();
-  const time = now.toLocaleTimeString("ja-JP", { hour12: false });
+
+  const time = now.toLocaleString("ja-JP", {
+    timeZone: "Asia/Tokyo",
+    hour12: false,
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  });
 
   const payload = {
     month,
