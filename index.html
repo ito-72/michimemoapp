@@ -166,11 +166,11 @@
                           method: "POST",
                           headers: { "Content-Type": "application/json" },
                           body: JSON.stringify({
-                            mode: "getTotalDistanceForDay",
-                            sheetName: `${selectedYear}年${selectedMonth}月${selectedPeriod}`,
-                            day: day.replace("日", "")
-                          })
-                        });
+  mode: "getTotalDistanceForDay",
+  sheetName: `${selectedYear}年${selectedMonth}月${selectedPeriod}`,
+  day: String(day).replace("日", "")
+})
+
                         const result = await res.json();
                         resultBox.textContent = `📅 ${selectedYear}年${selectedMonth}月${day}日の走行距離：${result.total} km`;
                       });
