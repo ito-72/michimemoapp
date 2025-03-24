@@ -26,6 +26,7 @@ export default async function handler(req, res) {
   });
 
   const payload = {
+    mode: "recordLocation",
     month,
     day,
     time,
