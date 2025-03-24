@@ -166,11 +166,11 @@
                           method: "POST",
                           headers: { "Content-Type": "application/json" },
                           body: JSON.stringify({
-  mode: "getTotalDistanceForDay",
-  sheetName: `${selectedYear}年${selectedMonth}月${selectedPeriod}`,
-  day: String(day).replace("日", "")
-})
-
+                            mode: "getTotalDistanceForDay",
+                            sheetName: `${selectedYear}年${selectedMonth}月${selectedPeriod}`,
+                            day: String(day).replace("日", "")
+                          })
+                        });
                         const result = await res.json();
                         resultBox.textContent = `📅 ${selectedYear}年${selectedMonth}月${day}日の走行距離：${result.total} km`;
                       });
@@ -192,7 +192,7 @@
         console.error("❌ エラー:", err);
         resultBox.textContent = "シート取得に失敗しました。";
       }
-    };
+    });
 
     function updateSelectedTab(container, selectedButton) {
       [...container.children].forEach(btn => btn.classList.remove("selected"));
