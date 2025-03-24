@@ -13,7 +13,7 @@
   <button id="distanceButton">今週の距離を記載</button>
   <button id="showDistanceByDay">該当日の距離を表示</button>
 
-  <!-- ✅ 結果表示ボックス（統一） -->
+  <!-- ✅ 結果表示ボックス -->
   <div id="resultBox">ここに結果が表示されます</div>
 
   <!-- ✅ タブエリア -->
@@ -24,8 +24,11 @@
     <div id="dayTabs" class="tab-group"></div>
   </div>
 
+  <!-- ✅ API使用状況表示 -->
+  <div id="apiUsageInfo" style="margin-top: 30px;">API使用状況を取得中...</div>
+
   <script>
-    let sheetData = []; // 📌 全シート名を保持
+    let sheetData = [];
     let selectedYear = null;
     let selectedMonth = null;
     let selectedPeriod = null;
@@ -52,6 +55,7 @@
 
           const result = await res.json();
           resultBox.textContent = `📍 ${result.message}`;
+          updateApiUsageDisplay(); // 送信後に使用回数を更新
         },
         (err) => {
           resultBox.textContent = `位置情報の取得に失敗: ${err.message}`;
@@ -70,9 +74,10 @@
 
       const result = await res.json();
       resultBox.textContent = `🚴‍♀️ ${result.message}`;
+      updateApiUsageDisplay(); // 使用後に更新
     });
 
-    // ✅ 該当日の距離を表示（年タブ生成）
+    // ✅ 日タブの生成
     document.getElementById("showDistanceByDay").addEventListener("click", async () => {
       const resultBox = document.getElementById("resultBox");
       resultBox.textContent = "シート一覧を取得中...";
@@ -166,7 +171,6 @@
                           method: "POST",
                           headers: { "Content-Type": "application/json" },
                           body: JSON.stringify({
-                            mode: "getTotalDistanceForDay",
                             sheetName: `${selectedYear}年${selectedMonth}月${selectedPeriod}`,
                             day: String(day).replace("日", "")
                           })
@@ -198,6 +202,22 @@
       [...container.children].forEach(btn => btn.classList.remove("selected"));
       selectedButton.classList.add("selected");
     }
+
+    // ✅ API使用状況を取得・表示
+    async function updateApiUsageDisplay() {
+      try {
+        const res = await fetch("/api/checkApiUsage", { method: "POST" });
+        const result = await res.json();
+        document.getElementById("apiUsageInfo").textContent =
+          `今日のAPI使用回数：${result.count}/${result.limit}`;
+      } catch (err) {
+        console.error("API使用状況の取得に失敗:", err);
+        document.getElementById("apiUsageInfo").textContent = "API使用状況の取得に失敗しました";
+      }
+    }
+
+    // ✅ ページ読み込み時に表示更新
+    window.onload = updateApiUsageDisplay;
   </script>
 </body>
 </html>
