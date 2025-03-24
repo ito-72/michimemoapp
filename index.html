@@ -25,6 +25,9 @@
   </div>
 
   <script>
+    let sheetData = []; // 📌 全シート名を保持
+    let selectedYear = null; // 📌 選択中の年
+
     // ✅ 現在地を送信
     document.getElementById("postButton").addEventListener("click", async () => {
       const resultBox = document.getElementById("resultBox");
@@ -75,16 +78,17 @@
       try {
         const res = await fetch("/api/getSheetNames", { method: "POST" });
         const result = await res.json();
+        sheetData = result.sheetNames;
 
-        console.log("\uD83D\uDD0D シート一覧取得: ", result.sheetNames);
+        console.log("\uD83D\uDD0D シート一覧取得: ", sheetData);
 
-        if (!result.sheetNames || result.sheetNames.length === 0) {
+        if (!sheetData || sheetData.length === 0) {
           resultBox.textContent = "シートが存在しません。";
           return;
         }
 
         const years = [...new Set(
-          result.sheetNames
+          sheetData
             .map(name => name.match(/^\d{4}/))
             .filter(match => match)
             .map(match => match[0])
@@ -92,14 +96,40 @@
 
         const yearTabs = document.getElementById("yearTabs");
         yearTabs.innerHTML = "";
+        document.getElementById("monthTabs").innerHTML = "";
+        document.getElementById("periodTabs").innerHTML = "";
+        document.getElementById("dayTabs").innerHTML = "";
 
         years.forEach(year => {
           const btn = document.createElement("button");
           btn.textContent = `${year}年`;
           btn.className = "tab-button";
           btn.addEventListener("click", () => {
+            selectedYear = year;
+            updateSelectedTab(yearTabs, btn);
             resultBox.textContent = `🗓️ ${year}年が選択されました`;
-            // 今後: 月タブをここで生成
+
+            // ✅ 月タブ生成
+            const monthMatches = sheetData.filter(name => name.startsWith(year)).map(name => {
+              const match = name.match(/(\d{1,2})月/);
+              return match ? match[1] : null;
+            }).filter(m => m);
+
+            const uniqueMonths = [...new Set(monthMatches)];
+            const monthTabs = document.getElementById("monthTabs");
+            monthTabs.innerHTML = "";
+
+            uniqueMonths.forEach(month => {
+              const mBtn = document.createElement("button");
+              mBtn.textContent = `${month}月`;
+              mBtn.className = "tab-button";
+              mBtn.addEventListener("click", () => {
+                updateSelectedTab(monthTabs, mBtn);
+                resultBox.textContent = `📆 ${year}年 ${month}月が選択されました`;
+                // 今後: 期間タブ生成へ
+              });
+              monthTabs.appendChild(mBtn);
+            });
           });
           yearTabs.appendChild(btn);
         });
@@ -111,6 +141,12 @@
         resultBox.textContent = "シート取得に失敗しました。";
       }
     });
+
+    // ✅ 選択中のタブボタンにだけ .selected を付与
+    function updateSelectedTab(container, selectedButton) {
+      [...container.children].forEach(btn => btn.classList.remove("selected"));
+      selectedButton.classList.add("selected");
+    }
   </script>
 </body>
 </html>
