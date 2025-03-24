@@ -26,7 +26,9 @@
 
   <script>
     let sheetData = []; // 📌 全シート名を保持
-    let selectedYear = null; // 📌 選択中の年
+    let selectedYear = null;
+    let selectedMonth = null;
+    let selectedPeriod = null;
 
     // ✅ 現在地を送信
     document.getElementById("postButton").addEventListener("click", async () => {
@@ -49,7 +51,7 @@
           });
 
           const result = await res.json();
-          resultBox.textContent = `\uD83D\uDCCD ${result.message}`;
+          resultBox.textContent = `📍 ${result.message}`;
         },
         (err) => {
           resultBox.textContent = `位置情報の取得に失敗: ${err.message}`;
@@ -67,7 +69,7 @@
       });
 
       const result = await res.json();
-      resultBox.textContent = `\uD83D\uDEB4\u200D♀️ ${result.message}`;
+      resultBox.textContent = `🚴‍♀️ ${result.message}`;
     });
 
     // ✅ 該当日の距離を表示（年タブ生成）
@@ -80,18 +82,8 @@
         const result = await res.json();
         sheetData = result.sheetNames;
 
-        console.log("\uD83D\uDD0D シート一覧取得: ", sheetData);
-
-        if (!sheetData || sheetData.length === 0) {
-          resultBox.textContent = "シートが存在しません。";
-          return;
-        }
-
         const years = [...new Set(
-          sheetData
-            .map(name => name.match(/^\d{4}/))
-            .filter(match => match)
-            .map(match => match[0])
+          sheetData.map(name => name.match(/^\d{4}/)).filter(Boolean).map(match => match[0])
         )];
 
         const yearTabs = document.getElementById("yearTabs");
@@ -113,20 +105,72 @@
             const monthMatches = sheetData.filter(name => name.startsWith(year)).map(name => {
               const match = name.match(/(\d{1,2})月/);
               return match ? match[1] : null;
-            }).filter(m => m);
+            }).filter(Boolean);
 
             const uniqueMonths = [...new Set(monthMatches)];
             const monthTabs = document.getElementById("monthTabs");
             monthTabs.innerHTML = "";
+            document.getElementById("periodTabs").innerHTML = "";
+            document.getElementById("dayTabs").innerHTML = "";
 
             uniqueMonths.forEach(month => {
               const mBtn = document.createElement("button");
               mBtn.textContent = `${month}月`;
               mBtn.className = "tab-button";
               mBtn.addEventListener("click", () => {
+                selectedMonth = month;
                 updateSelectedTab(monthTabs, mBtn);
                 resultBox.textContent = `📆 ${year}年 ${month}月が選択されました`;
-                // 今後: 期間タブ生成へ
+
+                // ✅ 期間タブ生成
+                const periodMatches = sheetData
+                  .filter(name => name.startsWith(`${year}年${month}月`))
+                  .map(name => {
+                    const match = name.match(/月(\d{1,2}-\d{1,2})/);
+                    return match ? match[1] : null;
+                  })
+                  .filter(Boolean);
+
+                const uniquePeriods = [...new Set(periodMatches)];
+                const periodTabs = document.getElementById("periodTabs");
+                periodTabs.innerHTML = "";
+                document.getElementById("dayTabs").innerHTML = "";
+
+                uniquePeriods.forEach(period => {
+                  const pBtn = document.createElement("button");
+                  pBtn.textContent = `${period}日`;
+                  pBtn.className = "tab-button";
+                  pBtn.addEventListener("click", async () => {
+                    selectedPeriod = period;
+                    updateSelectedTab(periodTabs, pBtn);
+                    resultBox.textContent = `📊 ${year}年${month}月${period}日の期間が選択されました`;
+
+                    // ✅ 日タブ生成（getAvailableDays.js 経由）
+                    const sheetName = `${year}年${month}月${period}`;
+                    const res = await fetch("/api/getAvailableDays", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ sheetName })
+                    });
+                    const result = await res.json();
+
+                    const dayTabs = document.getElementById("dayTabs");
+                    dayTabs.innerHTML = "";
+
+                    result.days.forEach(day => {
+                      const dBtn = document.createElement("button");
+                      dBtn.textContent = `${day}日`;
+                      dBtn.className = "tab-button";
+                      dBtn.addEventListener("click", () => {
+                        updateSelectedTab(dayTabs, dBtn);
+                        resultBox.textContent = `✅ ${day}日の合計距離を取得予定（今後）`;
+                        // 今後: 距離合計取得 → 表示処理へ
+                      });
+                      dayTabs.appendChild(dBtn);
+                    });
+                  });
+                  periodTabs.appendChild(pBtn);
+                });
               });
               monthTabs.appendChild(mBtn);
             });
@@ -142,7 +186,6 @@
       }
     });
 
-    // ✅ 選択中のタブボタンにだけ .selected を付与
     function updateSelectedTab(container, selectedButton) {
       [...container.children].forEach(btn => btn.classList.remove("selected"));
       selectedButton.classList.add("selected");
