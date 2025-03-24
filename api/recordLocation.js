@@ -1,3 +1,6 @@
+// GASの送信先URL（必要に応じて書き換えるだけでOK）
+const GAS_URL = "https://script.google.com/macros/s/XXXXXXXXXXXXXXXXXXXXXXX/exec";
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "POSTメソッドで送信してください" });
@@ -9,11 +12,9 @@ export default async function handler(req, res) {
     return res.status(400).json({ message: "緯度または経度が不足しています" });
   }
 
-  const GAS_URL = process.env.GAS_URL;
-
   // 現在日時（日本時間ベース）
   const now = new Date();
-  const month = now.getMonth() + 1; // 0月始まりなので+1
+  const month = now.getMonth() + 1;
   const day = now.getDate();
   const time = now.toLocaleTimeString("ja-JP", { hour12: false });
 
@@ -38,7 +39,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       message: result.status || "GASに送信成功",
-      raw: result // 必要に応じて全体を返す
+      raw: result
     });
 
   } catch (error) {
