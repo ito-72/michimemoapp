@@ -1,11 +1,5 @@
-// GASの送信先URL（Vercel環境変数から取得）
-const GAS_URL = process.env.GAS_URL;
-
-if (!GAS_URL) {
-  throw new Error("GAS_URL が環境変数に設定されていません。Vercelの環境変数を確認してください。");
-}
-
-
+// ✅ config.jsからGAS_URLを読み込み
+import { GAS_URL } from "./config.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -18,7 +12,6 @@ export default async function handler(req, res) {
     return res.status(400).json({ message: "緯度または経度が不足しています" });
   }
 
-  // 日本時間（JST）で現在日時を取得
   const now = new Date();
   const month = now.getMonth() + 1;
   const day = now.getDate();
