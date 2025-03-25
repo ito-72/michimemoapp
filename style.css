@@ -1,7 +1,7 @@
 /* ===== 全体レイアウト ===== */
 body {
   font-family: Arial, sans-serif;
-  background-color: #eaeaea; /* ライトモードでも少しグレーに */
+  background-color: #eaeaea;
   color: #333;
   text-align: center;
   padding: env(safe-area-inset-top, 20px) 20px env(safe-area-inset-bottom, 20px);
@@ -38,6 +38,15 @@ html, body {
 }
 
 /* ===== タブエリア ===== */
+#tabArea {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+#tabArea.open {
+  max-height: 1000px;
+}
+
 .tab-group {
   display: flex;
   justify-content: center;
@@ -70,20 +79,32 @@ html, body {
 
 /* ===== ボタンスタイル ===== */
 #postButton {
-  background: linear-gradient(135deg, #4CAF50, #81C784);
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #FF9800, #FFB74D);
   color: white;
-  font-size: 16px;
-  padding: 12px 24px;
+  font-size: 14px;
+  padding: 0;
+  width: 80px;
+  height: 80px;
   border: none;
-  border-radius: 999px;
+  border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  line-height: 1.2;
+  z-index: 999;
   transition: transform 0.2s ease-in-out, box-shadow 0.3s;
-  margin: 10px;
 }
 
 #distanceButton {
-  background: linear-gradient(135deg, #FF9800, #FFB74D); /* オレンジ系 */
+  background: linear-gradient(135deg, #4CAF50, #81C784);
   color: white;
   font-size: 16px;
   padding: 12px 24px;
