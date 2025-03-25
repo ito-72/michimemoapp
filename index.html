@@ -6,38 +6,39 @@
   <title>みちめも</title>
   <link rel="stylesheet" href="style.css">
   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#ffffff">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
   <link rel="manifest" href="/manifest.json">
-  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
+
+
 </head>
 
 <body>
-  <!-- 🌟 フレーム用コンテナ -->
-  <main class="container">
-    <!-- ✅ フッター固定の現在地送信ボタン -->
-    <button id="postButton" class="floating-circle-button">現在地<br>送信</button>
+  <!-- ✅ フッター固定の現在地送信ボタン -->
+  <button id="postButton" class="floating-circle-button">現在地<br>送信</button>
 
-    <!-- ✅ 結果表示ボックス -->
-    <div id="resultBox">ここに結果が表示されます</div>
+  <!-- ✅ 結果表示ボックス -->
+  <div id="resultBox">ここに結果が表示されます</div>
 
-    <!-- ✅ 残りのボタンたち -->
-    <button id="distanceButton">今週の距離を記載</button>
-    <button id="showDistanceByDay">該当日の距離を表示</button>
+  <!-- ✅ 残りのボタンたち -->
+  <button id="distanceButton">今週の距離を記載</button>
+  <button id="showDistanceByDay">該当日の距離を表示</button>
 
-    <!-- ✅ API使用状況表示 -->
-    <div id="apiUsageInfo">API使用状況を取得中...</div>
+  <!-- ✅ API使用状況表示 -->
+  <div id="apiUsageInfo">API使用状況を取得中...</div>
 
-    <!-- ✅ タブエリア -->
-    <div id="tabArea">
-      <div id="yearTabs" class="tab-group"></div>
-      <div id="monthTabs" class="tab-group"></div>
-      <div id="periodTabs" class="tab-group"></div>
-      <div id="dayTabs" class="tab-group"></div>
-    </div>
-  </main>
+  <!-- ✅ タブエリア -->
+  <div id="tabArea">
+    <div id="yearTabs" class="tab-group"></div>
+    <div id="monthTabs" class="tab-group"></div>
+    <div id="periodTabs" class="tab-group"></div>
+    <div id="dayTabs" class="tab-group"></div>
+  </div>
 
   <script>
     let sheetData = [];
@@ -45,6 +46,7 @@
     let selectedMonth = null;
     let selectedPeriod = null;
 
+    // ✅ トースト通知
     function showToast(message) {
       const toast = document.createElement("div");
       toast.className = "toast";
@@ -53,6 +55,7 @@
       setTimeout(() => toast.remove(), 2500);
     }
 
+    // ✅ 現在地を送信
     document.getElementById("postButton").addEventListener("click", async () => {
       const resultBox = document.getElementById("resultBox");
 
@@ -83,6 +86,7 @@
       );
     });
 
+    // ✅ 今週の距離を記載
     document.getElementById("distanceButton").addEventListener("click", async () => {
       const resultBox = document.getElementById("resultBox");
       resultBox.textContent = "計算中です...";
@@ -96,6 +100,7 @@
       updateApiUsageDisplay();
     });
 
+    // ✅ 日タブの生成と表示
     document.getElementById("showDistanceByDay").addEventListener("click", async () => {
       const resultBox = document.getElementById("resultBox");
       resultBox.textContent = "シート一覧を取得中...";

@@ -177,10 +177,9 @@ html, body {
 /* ===== ダークモード対応 ===== */
 @media (prefers-color-scheme: dark) {
   body {
-    background-color: #ffe8d1;
-    color: #333;
+    background-color: #121212;
+    color: #ffffff;
   }
-}
 
   #resultBox {
     background-color: #1e1e1e;
@@ -212,24 +211,4 @@ html, body {
   .toast {
     background-color: rgba(255, 255, 255, 0.1);
   }
-
-/* 🌟 コンテナ：茶色っぽいオレンジのカード風 */
-.container {
-  background-color: #fff5ec;
-  border: 4px solid #d97d4a;
-  border-radius: 24px;
-  padding: 20px;
-  margin: 20px auto;
-  max-width: 390px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  position: relative;
-}
-
-/* ✅ ボタンがコンテナの中で見えるよう調整 */
-.floating-circle-button {
-  position: absolute;
-  bottom: -50px;
-  left: 50%;
-  transform: translateX(-50%);
-}
 }
