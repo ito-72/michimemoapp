@@ -2,7 +2,7 @@
   "name": "みちめも",
   "short_name": "みちめも",
   "description": "たどってきた“みち”を“めも”するアプリ",
-  "start_url": "./",
+  "start_url": "/splash.html",
   "display": "standalone",
   "theme_color": "#ff9800",
   "background_color": "#ff9800",
