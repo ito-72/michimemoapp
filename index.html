@@ -20,25 +20,24 @@
 </head>
 
 <body>
-  <!-- ✅ ボタンたち（順番調整済） -->
+  <body>
   <button id="postButton">現在地<br>送信</button>
 
-  <!-- ✅ 結果表示ボックス -->
   <div id="resultBox">ここに結果が表示されます</div>
 
   <button id="distanceButton">今週の距離を記載</button>
-  <button id="showDistanceByDay">該当日の距離を表示</button>
+  <button id="showDistanceByDay">▶ 該当日の距離を表示</button>
 
-  <!-- ✅ API使用状況表示 -->
   <div id="apiUsageInfo">API使用状況を取得中...</div>
 
-  <!-- ✅ タブエリア -->
+  <!-- ✅ タブ表示欄（該当日の距離を表示で展開） -->
   <div id="tabArea">
     <div id="yearTabs" class="tab-group"></div>
     <div id="monthTabs" class="tab-group"></div>
     <div id="periodTabs" class="tab-group"></div>
     <div id="dayTabs" class="tab-group"></div>
   </div>
+
 
   <script>
     let sheetData = [];

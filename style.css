@@ -20,7 +20,8 @@ html, body {
 
 /* ===== 結果表示ボックス ===== */
 #resultBox,
-#distanceResult {
+#distanceResult,
+#tabArea {
   margin-top: 30px;
   padding: 15px;
   border: 2px solid #4caf50;
@@ -37,7 +38,7 @@ html, body {
   background-color: #e3f2fd;
 }
 
-/* ===== タブエリア ===== */
+/* ===== タブエリア（アコーディオン） ===== */
 #tabArea {
   max-height: 0;
   overflow: hidden;
@@ -86,7 +87,7 @@ html, body {
   transform: translateX(-50%);
   background: linear-gradient(135deg, #FF9800, #FFB74D);
   color: white;
-  font-size: 16px;
+  font-size: 20px;
   padding: 0;
   width: 140px;
   height: 140px;
@@ -172,7 +173,8 @@ button:active {
   }
 
   #resultBox,
-  #distanceResult {
+  #distanceResult,
+  #tabArea {
     background-color: #1e1e1e;
     border-color: #666;
     color: #fff;
