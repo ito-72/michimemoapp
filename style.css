@@ -42,9 +42,10 @@ html, body {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.5s ease;
+  margin-top: 20px;
 }
 #tabArea.open {
-  max-height: 1000px;
+  max-height: 2000px;
 }
 
 .tab-group {
@@ -85,10 +86,10 @@ html, body {
   transform: translateX(-50%);
   background: linear-gradient(135deg, #FF9800, #FFB74D);
   color: white;
-  font-size: 14px;
+  font-size: 16px;
   padding: 0;
-  width: 80px;
-  height: 80px;
+  width: 140px;
+  height: 140px;
   border: none;
   border-radius: 50%;
   cursor: pointer;
