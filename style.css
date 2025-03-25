@@ -51,19 +51,22 @@ html, body {
 
 .tab-group {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
-  margin: 10px 0;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 0;
 }
 
 .tab-button {
-  padding: 8px 14px;
+  display: inline-block;
+  padding: 10px 16px;
   margin: 6px;
   border: 1px solid #aaa;
   border-radius: 999px;
   background: linear-gradient(135deg, #eee, #ddd);
   cursor: pointer;
-  font-size: 15px;
+  font-size: 16px;
+  color: #333;
   transition: background 0.2s, transform 0.2s;
 }
 
