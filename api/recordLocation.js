@@ -1,5 +1,11 @@
-// GASの送信先URL（必要に応じて書き換えるだけでOK）
-const GAS_URL = "https://script.google.com/macros/s/AKfycby8UGsJ_65JvZwD3S5xudzjFbFnwKYxYDe6OutmHvHa4iprCcdPwkxaxn0GGuS9NLBW/exec";
+// GASの送信先URL（Vercel環境変数から取得）
+const GAS_URL = process.env.GAS_URL;
+
+if (!GAS_URL) {
+  throw new Error("GAS_URL が環境変数に設定されていません。Vercelの環境変数を確認してください。");
+}
+
+
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
