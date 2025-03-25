@@ -127,7 +127,7 @@
           btn.addEventListener("click", () => {
             selectedYear = year;
             updateSelectedTab(yearTabs, btn);
-            resultBox.textContent = `🗓️ ${year}年が選択されました`;
+            resultBox.textContent = `${year}年が選択されました`;
 
             const monthMatches = sheetData.filter(name => name.startsWith(year)).map(name => {
               const match = name.match(/(\d{1,2})月/);
@@ -147,7 +147,7 @@
               mBtn.addEventListener("click", () => {
                 selectedMonth = month;
                 updateSelectedTab(monthTabs, mBtn);
-                resultBox.textContent = `📆 ${year}年 ${month}月が選択されました`;
+                resultBox.textContent = `${year}年 ${month}月が選択されました`;
 
                 const periodMatches = sheetData
                   .filter(name => name.startsWith(`${year}年${month}月`))
