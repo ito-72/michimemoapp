@@ -18,7 +18,7 @@ html, body {
   overflow-x: hidden;
 }
 
-/* ===== 結果表示ボックス（余白アップ & デザイン刷新） ===== */
+/* ===== 結果表示ボックス ===== */
 #resultBox {
   min-height: 60px;
   background-color: #f5f5f5;
@@ -48,12 +48,12 @@ html, body {
 .tab-button {
   padding: 8px 14px;
   margin: 6px;
-  border: 0.5px solid #bbb;
+  border: 1px solid #aaa;
   border-radius: 999px;
-  background: linear-gradient(135deg, #f0f4f8, #e2e8f0); /* グレー～淡ブルー */
+  background: linear-gradient(135deg, #f0f4f8, #e2e8f0);
   cursor: pointer;
   font-size: 15px;
-  color: #3b3b3b; /* こげ茶っぽい文字色 */
+  color: #3b3b3b;
   transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 
@@ -71,7 +71,7 @@ html, body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* ===== ボタンスタイル（色入れ替え）===== */
+/* ===== ボタンスタイル ===== */
 #postButton {
   background: linear-gradient(135deg, #FF9800, #FFB74D);
   color: white;
@@ -125,12 +125,13 @@ html, body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-family: 'M PLUS Rounded 1c', sans-serif;
 }
 
 /* ===== トースト通知（右→左スライド式）===== */
 .toast {
   position: fixed;
-  bottom: 160px;
+  bottom: 220px;
   left: 0;
   right: 0;
   margin: auto;
@@ -142,7 +143,7 @@ html, body {
   border-radius: 16px;
   font-size: 20px;
   opacity: 0;
-  animation: slideToast 2.5s ease-in-out forwards;
+  animation: slideToast 1.5s ease-in-out forwards;
   z-index: 1000;
 }
 
@@ -181,7 +182,7 @@ html, body {
   .tab-button {
     background: linear-gradient(135deg, #444, #333);
     color: #fff;
-    border: 0.5px solid #666;
+    border: 1px solid #666;
   }
 
   .tab-button:hover {

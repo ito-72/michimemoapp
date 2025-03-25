@@ -12,6 +12,8 @@
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
   <link rel="manifest" href="/manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
@@ -72,8 +74,8 @@
           });
 
           const result = await res.json();
-          resultBox.textContent = `📍 ${result.message}`;
-          showToast("送信しました ✅");
+          resultBox.textContent = `${result.message}`;
+          showToast("送信しました");
           updateApiUsageDisplay();
         },
         (err) => {
@@ -92,7 +94,7 @@
       });
 
       const result = await res.json();
-      resultBox.textContent = `🚴‍♀️ ${result.message}`;
+      resultBox.textContent = `${result.message}`;
       updateApiUsageDisplay();
     });
 
