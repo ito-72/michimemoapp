@@ -13,6 +13,8 @@
   <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
   <link rel="manifest" href="/manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
+
 
 </head>
 
@@ -167,7 +169,7 @@
                   pBtn.addEventListener("click", async () => {
                     selectedPeriod = period;
                     updateSelectedTab(periodTabs, pBtn);
-                    resultBox.textContent = `📊 ${year}年${month}月${period}日の期間が選択されました（取得中...）`;
+                    resultBox.textContent = `${year}年${month}月${period}日の期間が選択されました（取得中...）`;
 
                     const sheetName = `${year}年${month}月${period}`;
                     const res = await fetch("/api/getAvailableDays", {
@@ -213,7 +215,7 @@
           yearTabs.appendChild(btn);
         });
 
-        resultBox.textContent = "✅ 年タブを生成しました";
+        resultBox.textContent = "年タブを生成しました";
       } catch (err) {
         console.error("❌ エラー:", err);
         resultBox.textContent = "シート取得に失敗しました。";
