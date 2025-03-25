@@ -16,21 +16,22 @@
     body {
       background: url('/apple-splash-1206x2622.png') no-repeat center center;
       background-size: cover;
-      transition: opacity 0.5s ease;
+   transition: opacity 0.7s ease; /* フェード時間と合わせる */
       opacity: 1;
     }
     body.fadeout {
       opacity: 0;
     }
   </style>
-  <script>
+<script>
+  setTimeout(() => {
+    document.body.classList.add('fadeout');
     setTimeout(() => {
-      document.body.classList.add('fadeout');
-      setTimeout(() => {
-        window.location.href = '/';
-      }, 500);
-    }, 1000);
-  </script>
+      window.location.href = '/';
+    }, 700); // フェード時間 0.7秒
+  }, 1800); // 表示時間 1.8秒
+</script>
+
 </head>
 <body>
 </body>
