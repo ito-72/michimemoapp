@@ -20,8 +20,7 @@ html, body {
 
 /* ===== 結果表示ボックス ===== */
 #resultBox,
-#distanceResult,
-#tabArea {
+#distanceResult {
   margin-top: 30px;
   padding: 15px;
   border: 2px solid #4caf50;
@@ -38,35 +37,22 @@ html, body {
   background-color: #e3f2fd;
 }
 
-/* ===== タブエリア（アコーディオン） ===== */
-#tabArea {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.5s ease;
-  margin-top: 20px;
-}
-#tabArea.open {
-  max-height: 2000px;
-}
-
+/* ===== タブエリア ===== */
 .tab-group {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
-  padding: 10px 0;
+  flex-wrap: wrap;
+  margin: 10px 0;
 }
 
 .tab-button {
-  display: inline-block;
-  padding: 10px 16px;
+  padding: 8px 14px;
   margin: 6px;
   border: 1px solid #aaa;
   border-radius: 999px;
   background: linear-gradient(135deg, #eee, #ddd);
   cursor: pointer;
-  font-size: 16px;
-  color: #333;
+  font-size: 15px;
   transition: background 0.2s, transform 0.2s;
 }
 
@@ -82,34 +68,17 @@ html, body {
   border-color: #fbc02d;
 }
 
-/* ===== ボタンスタイル ===== */
+/* ===== ボタンスタイル（色入れ替え）===== */
 #postButton {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: linear-gradient(135deg, #FF9800, #FFB74D);
+  background: linear-gradient(135deg, #FF9800, #FFB74D); /* オレンジ系に変更 */
   color: white;
   font-size: 20px;
-  padding: 0;
-  width: 140px;
-  height: 140px;
   border: none;
-  border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  line-height: 1.2;
-  z-index: 999;
-  transition: transform 0.2s ease-in-out, box-shadow 0.3s;
 }
 
 #distanceButton {
-  background: linear-gradient(135deg, #4CAF50, #81C784);
+  background: linear-gradient(135deg, #4CAF50, #81C784); /* グリーン系に変更 */
   color: white;
   font-size: 16px;
   padding: 12px 24px;
@@ -134,20 +103,31 @@ html, body {
   margin: 10px;
 }
 
-button:hover {
-  transform: translateY(-3px);
+/* ===== フローティングボタン（現在地送信）===== */
+.floating-circle-button {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 1.2;
+  padding: 10px 0;
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
-}
-
-button:active {
-  transform: scale(0.96);
-  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 /* ===== トースト通知 ===== */
 .toast {
   position: fixed;
-  bottom: 30px;
+  bottom: 160px; /* フローティングボタンと被らないように調整 */
   left: 50%;
   transform: translateX(-50%);
   background-color: #323232;
@@ -155,7 +135,7 @@ button:active {
   padding: 12px 24px;
   border-radius: 8px;
   box-shadow: 0px 2px 6px rgba(0,0,0,0.3);
-  font-size: 16px;
+  font-size: 20px; /* サイズアップ */
   opacity: 0;
   animation: fadeInOut 2.5s ease-in-out forwards;
   z-index: 1000;
@@ -176,8 +156,7 @@ button:active {
   }
 
   #resultBox,
-  #distanceResult,
-  #tabArea {
+  #distanceResult {
     background-color: #1e1e1e;
     border-color: #666;
     color: #fff;
