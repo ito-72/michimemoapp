@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <title>みちめも - スプラッシュ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <style>
     * {
       margin: 0;
@@ -16,7 +19,7 @@
     body {
       background: url('/apple-splash-1206x2622.png') no-repeat center center;
       background-size: cover;
-   transition: opacity 0.7s ease; /* フェード時間と合わせる */
+   transition: opacity 0.5s ease; /* フェード時間と合わせる */
       opacity: 1;
     }
     body.fadeout {
@@ -28,8 +31,8 @@
     document.body.classList.add('fadeout');
     setTimeout(() => {
       window.location.href = '/';
-    }, 700); // フェード時間 0.7秒
-  }, 1800); // 表示時間 1.8秒
+    }, 500); // フェード時間 0.5秒
+  }, 1200); // 表示時間 1.2秒
 </script>
 
 </head>
