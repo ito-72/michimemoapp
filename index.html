@@ -188,7 +188,7 @@
                       dBtn.className = "tab-button";
                       dBtn.addEventListener("click", async () => {
                         updateSelectedTab(dayTabs, dBtn);
-                        resultBox.textContent = `📏 ${day}日の距離を集計中...`;
+                        resultBox.textContent = `${day}日の距離を集計中...`;
 
                         const res = await fetch("/api/getTotalDistanceForDay", {
                           method: "POST",
