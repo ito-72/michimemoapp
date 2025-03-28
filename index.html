@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>お単価くん</title>
+  <title>みちめも</title>
   <link rel="stylesheet" href="style.css">
-
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#ffffff">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -19,381 +18,230 @@
 
 
 
-
 </head>
 
 <body>
-  <div class="container">
+  <!-- ✅ フッター固定の現在地送信ボタン -->
+  <button id="postButton" class="floating-circle-button">現在地<br>送信</button>
 
-    <!-- 表示セクション -->
-    <section class="display-section">
-      <div style="display: flex; align-items: center; gap: 1em;">
-        <h1>商品セレクター</h1>
-        <p id="status-message">🔄 読み込み中.</p>
-      </div>
+  <!-- ✅ 結果表示ボックス -->
+  <div id="resultBox">ここに結果が表示されます</div>
 
-      <div style="display: flex; align-items: center; gap: 1em;">
+  <!-- ✅ 残りのボタンたち -->
+  <button id="distanceButton">今週の距離を記載</button>
+  <button id="showDistanceByDay">該当日の距離を表示</button>
 
-       <label for="sale-toggle">セール中</label>
-<label class="switch-display">
-  <input type="checkbox" id="sale-toggle">
-  <span class="slider-display"></span>
-</label>
+  <!-- ✅ API使用状況表示 -->
+  <div id="apiUsageInfo">API使用状況を取得中...</div>
 
-
-        <select id="item-select">
-          <option value="">-- 項目を選択 --</option>
-        </select>
-      </div>
-
-      <!-- 表示用テーブル -->
-      <table border="1" style="margin-top: 1em; border-collapse: collapse;">
-        <thead>
-          <tr>
-            <th>項目</th>
-            <th>内容量</th>
-            <th>単位</th>
-            <th>個数（内容量のものがいくつあるか）</th>
-            <th>税抜き</th>
-            <th>税込み</th>
-            <th>単価（税込み）</th>
-            <th>単価の単位</th>
-            <th>お店</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td id="item-name">--</td>
-            <td id="content">--</td>
-            <td id="unit">--</td>
-            <td id="count">--</td>
-            <td id="price-before-tax">--</td>
-            <td id="price-taxed">--</td>
-            <td id="unit-price">--</td>
-            <td id="unit-of-unit-price">--</td>
-            <td id="store">--</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-
-    <!-- 入力セクション -->
-    <section class="input-section">
-      <div class="form-row">
-        <label for="input-content">内容量</label>
-        <input type="number" id="input-content" />
-      </div>
-
-      <div class="form-row">
-        <label for="input-count">個数</label>
-        <input type="number" id="input-count" />
-      </div>
-
-      <div class="form-row">
-        <label for="input-price">金額</label>
-        <input type="number" id="input-price" />
-      </div>
-
-      <div class="form-row">
-        <label>税抜 / 税込</label>
-        <div class="radio-group">
-          <label><input type="radio" name="tax-mode" value="before" checked /> 税抜</label>
-          <label><input type="radio" name="tax-mode" value="after" /> 税込</label>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <label for="calculated-unit-price">単価</label>
-        <input type="text" id="calculated-unit-price" readonly />
-      </div>
-
-      <button id="calculate-btn" style="margin-top: 1em;">🧮 単価を計算！</button>
-
-      <!-- 🔵 セール中スライドスイッチ -->
-     <div class="form-row">
-  <label for="input-sale">セール中</label>
-  <label class="switch-input">
-    <input type="checkbox" id="input-sale">
-    <span class="slider-input"></span>
-  </label>
-</div>
-
-
-
-      <!-- 🔵 項目 -->
-      <div class="form-row">
-        <label for="input-item-select">項目</label>
-        <div style="flex: 1;">
-          <select id="input-item-select" style="width: 100%;">
-            <option value="">-- 項目を選択 --</option>
-            <option value="__new__">＋ 新規追加</option>
-          </select>
-          <div id="new-item-wrapper" style="display: none; margin-top: 0.5em;">
-            <input type="text" id="new-item-name" placeholder="新しい項目名" style="width: 100%;" />
-          </div>
-        </div>
-      </div>
-
-      <!-- 🔵 単位 -->
-      <div class="form-row">
-        <label for="input-unit">単位</label>
-        <input type="text" id="input-unit" />
-      </div>
-
-      <!-- 🔵 お店 -->
-      <div class="form-row">
-        <label for="input-store-select">お店</label>
-        <div style="flex: 1;">
-          <select id="input-store-select" style="width: 100%;">
-            <option value="">-- お店を選択 --</option>
-            <option value="__new__">＋ 新規追加</option>
-          </select>
-          <div id="new-store-wrapper" style="display: none; margin-top: 0.5em;">
-            <input type="text" id="new-store-name" placeholder="新しいお店名" style="width: 100%;" />
-          </div>
-        </div>
-      </div>
-
-      <button id="register-btn" style="margin-top: 1em;">📝 登録</button>
-      <p id="register-status" style="margin-top: 0.5em; color: green;"></p>
-    </section>
+  <!-- ✅ タブエリア -->
+  <div id="tabArea">
+    <div id="yearTabs" class="tab-group"></div>
+    <div id="monthTabs" class="tab-group"></div>
+    <div id="periodTabs" class="tab-group"></div>
+    <div id="dayTabs" class="tab-group"></div>
   </div>
 
+  <script>
+    let sheetData = [];
+    let selectedYear = null;
+    let selectedMonth = null;
+    let selectedPeriod = null;
 
-
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    fetchAndPopulateItems();
-  });
-
-  let allItems = [];
-
-  async function fetchAndPopulateItems() {
-    const statusMessage = document.getElementById("status-message");
-
-    try {
-      const response = await fetch("/api/fetchData", { method: "POST" });
-      const data = await response.json();
-      allItems = data;
-
-      console.log("取得データ:", data);
-
-      populateItemSelect();
-      populateInputSelects(); // ← 追加
-
-      statusMessage.style.display = "none";
-
-      document.getElementById("item-select").addEventListener("change", updateTableDisplay);
-      document.getElementById("sale-toggle").addEventListener("change", updateTableDisplay);
-    } catch (error) {
-      console.error("データ取得エラー:", error);
-      statusMessage.textContent = "⚠️ データ取得に失敗しました";
+    // ✅ トースト通知
+    function showToast(message) {
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 2500);
     }
-  }
 
-  function populateItemSelect() {
-    const displayItemSelect = document.getElementById("item-select");
-    const uniqueItems = [...new Set(allItems.map(item => item.itemName).filter(Boolean))];
-    displayItemSelect.innerHTML = '<option value="">-- 項目を選択 --</option>';
-    uniqueItems.forEach(name => {
-      const option = document.createElement("option");
-      option.value = name;
-      option.textContent = name;
-      displayItemSelect.appendChild(option);
-    });
-  }
+    // ✅ 現在地を送信
+    document.getElementById("postButton").addEventListener("click", async () => {
+      const resultBox = document.getElementById("resultBox");
 
-  function populateInputSelects() {
-    // 項目セレクト
-    const inputItemSelect = document.getElementById("input-item-select");
-    const uniqueItemNames = [...new Set(allItems.map(item => item.itemName).filter(Boolean))];
-    inputItemSelect.innerHTML = '<option value="">-- 項目を選択 --</option>';
-    uniqueItemNames.forEach(name => {
-      const option = document.createElement("option");
-      option.value = name;
-      option.textContent = name;
-      inputItemSelect.appendChild(option);
-    });
-    const newOption = document.createElement("option");
-    newOption.value = "__new__";
-    newOption.textContent = "＋ 新規追加";
-    inputItemSelect.appendChild(newOption);
-
-    // お店セレクト
-    const inputStoreSelect = document.getElementById("input-store-select");
-    const uniqueStores = [...new Set(allItems.map(item => item.store).filter(Boolean))];
-    inputStoreSelect.innerHTML = '<option value="">-- お店を選択 --</option>';
-    uniqueStores.forEach(store => {
-      const option = document.createElement("option");
-      option.value = store;
-      option.textContent = store;
-      inputStoreSelect.appendChild(option);
-    });
-    const newStoreOption = document.createElement("option");
-    newStoreOption.value = "__new__";
-    newStoreOption.textContent = "＋ 新規追加";
-    inputStoreSelect.appendChild(newStoreOption);
-  }
-
-  function updateTableDisplay() {
-    const selectedItem = document.getElementById("item-select").value;
-    const saleOnly = document.getElementById("sale-toggle").checked;
-
-    const filtered = allItems.filter(item => {
-      const nameMatches = item.itemName === selectedItem;
-      const saleMatches = saleOnly ? item.sale === true : item.sale !== true;
-      return nameMatches && saleMatches;
-    });
-
-    const latest = filtered[filtered.length - 1];
-
-    const fieldMap = {
-      "item-name": "itemName",
-      "content": "content",
-      "unit": "unit",
-      "count": "count",
-      "price-before-tax": "priceBeforeTax",
-      "price-taxed": "priceTaxed",
-      "unit-price": "unitPrice",
-      "unit-of-unit-price": "unitOfUnitPrice",
-      "store": "store",
-    };
-
-    if (latest) {
-      for (const [id, key] of Object.entries(fieldMap)) {
-        document.getElementById(id).textContent = latest[key] ?? "--";
+      if (!navigator.geolocation) {
+        resultBox.textContent = "このブラウザでは位置情報が使えません。";
+        return;
       }
-    } else {
-      for (const id of Object.keys(fieldMap)) {
-        document.getElementById(id).textContent = "--";
-      }
-    }
-  }
 
-  // 入力取得
-  const inputContent = document.getElementById("input-content");
-  const inputCount = document.getElementById("input-count");
-  const inputPrice = document.getElementById("input-price");
-  const unitPriceField = document.getElementById("calculated-unit-price");
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
 
-  const inputItemSelect = document.getElementById("input-item-select");
-  const newItemWrapper = document.getElementById("new-item-wrapper");
-  const inputStoreSelect = document.getElementById("input-store-select");
-  const newStoreWrapper = document.getElementById("new-store-wrapper");
+          const res = await fetch("/api/recordLocation", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ lat, lng })
+          });
 
-  const inputUnit = document.getElementById("input-unit"); // ✅ ← 追加ここ！
-
-  // 税抜→税込（10%）
-  function calculateTaxIncluded(price, isTaxBefore) {
-    return isTaxBefore ? Math.round(price * 1.1) : price;
-  }
-
-  // 単価計算（ボタン用）
-  function updateUnitPriceFromButton() {
-    const content = parseFloat(inputContent.value);
-    const count = parseFloat(inputCount.value);
-    const price = parseFloat(inputPrice.value);
-    const taxMode = document.querySelector('input[name="tax-mode"]:checked').value;
-
-    if (!isNaN(content) && !isNaN(count) && !isNaN(price) && content > 0 && count > 0) {
-      const totalAmount = count * content;
-      const taxedPrice = calculateTaxIncluded(price, taxMode === "before");
-      const unitPrice = taxedPrice / totalAmount;
-      unitPriceField.value = unitPrice.toFixed(2);
-    } else {
-      unitPriceField.value = "";
-    }
-  }
-
-  // 🧮ボタンで計算
-  document.getElementById("calculate-btn").addEventListener("click", updateUnitPriceFromButton);
-
-  // 入力変化でも自動計算
-  function triggerCalculateButton() {
-    document.getElementById("calculate-btn").click();
-  }
-
-  inputContent.addEventListener("input", triggerCalculateButton);
-  inputCount.addEventListener("input", triggerCalculateButton);
-  inputPrice.addEventListener("input", triggerCalculateButton);
-  document.querySelectorAll('input[name="tax-mode"]').forEach(radio => {
-    radio.addEventListener("change", triggerCalculateButton);
-  });
-
-  // 新規項目・お店の欄を切り替え＋単位自動反映
-  inputItemSelect.addEventListener("change", () => {
-    newItemWrapper.style.display = inputItemSelect.value === "__new__" ? "block" : "none";
-
-    const selected = inputItemSelect.value;
-    if (selected === "__new__") {
-      inputUnit.value = "";
-      inputUnit.readOnly = false;
-    } else {
-      const matchedItem = allItems.find(item => item.itemName === selected);
-      if (matchedItem) {
-        inputUnit.value = matchedItem.unit || "";
-        inputUnit.readOnly = true;
-      } else {
-        inputUnit.value = "";
-        inputUnit.readOnly = false;
-      }
-    }
-  });
-
-  inputStoreSelect.addEventListener("change", () => {
-    newStoreWrapper.style.display = inputStoreSelect.value === "__new__" ? "block" : "none";
-  });
-
-
-
-//登録スクリプト
-document.getElementById("register-btn").addEventListener("click", async () => {
-  const itemName = inputItemSelect.value === "__new__"
-    ? document.getElementById("new-item-name").value.trim()
-    : inputItemSelect.value;
-
-  const storeName = inputStoreSelect.value === "__new__"
-    ? document.getElementById("new-store-name").value.trim()
-    : inputStoreSelect.value;
-
-  const payload = {
-    mode: "recordItem",
-    itemName,
-    content: inputContent.value,
-    unit: inputUnit.value,
-    count: inputCount.value,
-    priceBeforeTax: inputPrice.value,
-    priceTaxed: calculateTaxIncluded(parseFloat(inputPrice.value), document.querySelector('input[name="tax-mode"]:checked').value === "before"),
-    unitPrice: unitPriceField.value,
-    unitOfUnitPrice: inputUnit.value,
-    store: storeName,
-    sale: document.getElementById("input-sale").checked
-  };
-
-  try {
-    const response = await fetch("/api/recordItem", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+          const result = await res.json();
+          resultBox.textContent = `${result.message}`;
+          showToast("送信しました");
+          updateApiUsageDisplay();
+        },
+        (err) => {
+          resultBox.textContent = `位置情報の取得に失敗: ${err.message}`;
+        }
+      );
     });
 
-    const result = await response.json();
+    // ✅ 今週の距離を記載
+    document.getElementById("distanceButton").addEventListener("click", async () => {
+      const resultBox = document.getElementById("resultBox");
+      resultBox.textContent = "計算中です...";
 
-    if (result.success) {
-      document.getElementById("register-status").textContent = "✅ スプレッドを更新しました！";
-    } else {
-      document.getElementById("register-status").textContent = "⚠️ 登録に失敗しました。";
+      const res = await fetch("/api/calculateWeeklyDistance", {
+        method: "POST"
+      });
+
+      const result = await res.json();
+      resultBox.textContent = `${result.message}`;
+      updateApiUsageDisplay();
+    });
+
+    // ✅ 日タブの生成と表示
+    document.getElementById("showDistanceByDay").addEventListener("click", async () => {
+      const resultBox = document.getElementById("resultBox");
+      resultBox.textContent = "シート一覧を取得中...";
+
+      try {
+        const res = await fetch("/api/getSheetNames", { method: "POST" });
+        const result = await res.json();
+        sheetData = result.sheetNames;
+
+        const years = [...new Set(
+          sheetData.map(name => name.match(/^\d{4}/)).filter(Boolean).map(match => match[0])
+        )];
+
+        const yearTabs = document.getElementById("yearTabs");
+        yearTabs.innerHTML = "";
+        document.getElementById("monthTabs").innerHTML = "";
+        document.getElementById("periodTabs").innerHTML = "";
+        document.getElementById("dayTabs").innerHTML = "";
+
+        years.forEach(year => {
+          const btn = document.createElement("button");
+          btn.textContent = `${year}年`;
+          btn.className = "tab-button";
+          btn.addEventListener("click", () => {
+            selectedYear = year;
+            updateSelectedTab(yearTabs, btn);
+            resultBox.textContent = `${year}年が選択されました`;
+
+            const monthMatches = sheetData.filter(name => name.startsWith(year)).map(name => {
+              const match = name.match(/(\d{1,2})月/);
+              return match ? match[1] : null;
+            }).filter(Boolean);
+
+            const uniqueMonths = [...new Set(monthMatches)];
+            const monthTabs = document.getElementById("monthTabs");
+            monthTabs.innerHTML = "";
+            document.getElementById("periodTabs").innerHTML = "";
+            document.getElementById("dayTabs").innerHTML = "";
+
+            uniqueMonths.forEach(month => {
+              const mBtn = document.createElement("button");
+              mBtn.textContent = `${month}月`;
+              mBtn.className = "tab-button";
+              mBtn.addEventListener("click", () => {
+                selectedMonth = month;
+                updateSelectedTab(monthTabs, mBtn);
+                resultBox.textContent = `${year}年 ${month}月が選択されました`;
+
+                const periodMatches = sheetData
+                  .filter(name => name.startsWith(`${year}年${month}月`))
+                  .map(name => {
+                    const match = name.match(/月(\d{1,2}-\d{1,2})/);
+                    return match ? match[1] : null;
+                  })
+                  .filter(Boolean);
+
+                const uniquePeriods = [...new Set(periodMatches)];
+                const periodTabs = document.getElementById("periodTabs");
+                periodTabs.innerHTML = "";
+                document.getElementById("dayTabs").innerHTML = "";
+
+                uniquePeriods.forEach(period => {
+                  const pBtn = document.createElement("button");
+                  pBtn.textContent = `${period}日`;
+                  pBtn.className = "tab-button";
+                  pBtn.addEventListener("click", async () => {
+                    selectedPeriod = period;
+                    updateSelectedTab(periodTabs, pBtn);
+                    resultBox.textContent = `${year}年${month}月${period}日の期間が選択されました（取得中...）`;
+
+                    const sheetName = `${year}年${month}月${period}`;
+                    const res = await fetch("/api/getAvailableDays", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ sheetName })
+                    });
+                    const result = await res.json();
+
+                    const dayTabs = document.getElementById("dayTabs");
+                    dayTabs.innerHTML = "";
+
+                    result.days.forEach(day => {
+                      const dBtn = document.createElement("button");
+                      dBtn.textContent = `${day}日`;
+                      dBtn.className = "tab-button";
+                      dBtn.addEventListener("click", async () => {
+                        updateSelectedTab(dayTabs, dBtn);
+                        resultBox.textContent = `${day}日の距離を集計中...`;
+
+                        const res = await fetch("/api/getTotalDistanceForDay", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({
+                            mode: "getTotalDistanceForDay",
+                            sheetName: `${selectedYear}年${selectedMonth}月${selectedPeriod.replace("日", "")}`,
+                            day: String(day).replace("日", "")
+                          })
+                        });
+
+                        const result = await res.json();
+                        resultBox.textContent = `${selectedYear}年${selectedMonth}月${day}日の走行距離：${result.total} km`;
+                      });
+                      dayTabs.appendChild(dBtn);
+                    });
+                  });
+                  periodTabs.appendChild(pBtn);
+                });
+              });
+              monthTabs.appendChild(mBtn);
+            });
+          });
+          yearTabs.appendChild(btn);
+        });
+
+        resultBox.textContent = "年タブを生成しました";
+      } catch (err) {
+        console.error("❌ エラー:", err);
+        resultBox.textContent = "シート取得に失敗しました。";
+      }
+    });
+
+    function updateSelectedTab(container, selectedButton) {
+      [...container.children].forEach(btn => btn.classList.remove("selected"));
+      selectedButton.classList.add("selected");
     }
-  } catch (error) {
-    console.error("登録エラー:", error);
-    document.getElementById("register-status").textContent = "⚠️ 通信エラーが発生しました。";
-  }
-});
 
+    async function updateApiUsageDisplay() {
+      try {
+        const res = await fetch("/api/checkApiUsage", { method: "POST" });
+        const result = await res.json();
+        document.getElementById("apiUsageInfo").textContent =
+          `今日のAPI使用回数：${result.count}/${result.limit}`;
+      } catch (err) {
+        console.error("API使用状況の取得に失敗:", err);
+        document.getElementById("apiUsageInfo").textContent = "API使用状況の取得に失敗しました";
+      }
+    }
 
-
-</script>
-
-
+    window.onload = updateApiUsageDisplay;
+  </script>
 </body>
 </html>

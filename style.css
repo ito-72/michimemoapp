@@ -1,167 +1,216 @@
+/* ===== 全体レイアウト ===== */
 body {
-  background-color: #ffffff;
-  position: relative;
+  font-family: Arial, sans-serif;
+  background-color: #eaeaea;
+  color: #333;
+  text-align: center;
+  padding: env(safe-area-inset-top, 20px) 20px env(safe-area-inset-bottom, 20px);
+  margin: 0;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+html, body {
+  height: 100%;
   overflow-x: hidden;
 }
 
-.container {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 1em;
-  box-sizing: border-box;
-}
-
-.display-section {
-  background-color: #e0f7fa;
-  border-radius: 16px;
-  padding: 1em;
-  margin-bottom: 1.5em;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.input-section {
-  background-color: #ffe4f2;
-  border-radius: 16px;
-  padding: 1em;
-  margin-bottom: 2em;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.form-row {
+/* ===== 結果表示ボックス ===== */
+#resultBox {
+  font-family: 'M PLUS Rounded 1c', sans-serif; /* ←この1行追加！ */
+  min-height: 60px;
+  background-color: #f5f5f5;
+  color: #333;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  font-size: 18px;
+  padding: 12px 20px;
   display: flex;
   align-items: center;
-  gap: 0.8em;
-  margin-bottom: 1em;
+  justify-content: center;
+  margin: 40px auto 20px;
+  width: fit-content;
+  max-width: 90%;
+  transition: all 0.3s ease;
 }
 
-.form-row label {
-  width: 6em;
-  font-weight: bold;
-  font-size: 1em;
-  color: #333;
-}
 
-.form-row input[type="number"],
-.form-row input[type="text"] {
-  flex: 1;
-  padding: 0.5em;
-  font-size: 1em;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-sizing: border-box;
-}
-
-.radio-group {
+/* ===== タブエリア ===== */
+.tab-group {
   display: flex;
-  gap: 1em;
+  justify-content: center;
   flex-wrap: wrap;
+  margin: 10px 0;
 }
 
-select {
-  appearance: none;
-  background-color: #fff;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  padding: 0.5em;
-  font-size: 1em;
-  box-sizing: border-box;
-  background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
-  background-repeat: no-repeat;
-  background-position: right 0.5em center;
-  background-size: 1em;
+.tab-button {
+  padding: 8px 14px;
+  margin: 6px;
+  border: 1px solid #aaa;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f0f4f8, #e2e8f0);
+  cursor: pointer;
+  font-size: 15px;
+  color: #3b3b3b;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 
-button {
-  background-color: #ff4081;
+.tab-button:hover {
+  background: linear-gradient(135deg, #dce6f0, #cbd5e1);
+  transform: translateY(-2px);
+}
+
+.tab-button.selected {
+  background: linear-gradient(135deg, #FFEB3B, #FFC107);
+  color: black;
+  font-weight: bold;
+  border-color: #fbc02d;
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== ボタンスタイル ===== */
+#postButton {
+  background: linear-gradient(135deg, #FF9800, #FFB74D);
   color: white;
+  font-size: 20px;
   border: none;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  border-radius: 12px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
-  width: 100%;
-  margin-top: 1em;
 }
 
-button:hover {
-  background-color: #f50057;
+#distanceButton {
+  background: linear-gradient(135deg, #4CAF50, #81C784);
+  color: white;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease-in-out, box-shadow 0.3s;
+  margin: 10px;
 }
 
-/* 表示用スイッチ（上） */
-.switch-display {
-display: none;
-}
-.slider-display {
-  position: absolute;
+#showDistanceByDay {
+  background: linear-gradient(135deg, #03A9F4, #81D4FA);
+  color: white;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 999px;
   cursor: pointer;
-  background-color: #ccc;
-  border-radius: 34px;
-  top: 0;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease-in-out, box-shadow 0.3s;
+  margin: 10px;
+}
+
+/* ===== フローティングボタン（現在地送信）===== */
+.floating-circle-button {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 1.1;
+  padding: 0;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+}
+
+/* ===== トースト通知（右→左スライド式）===== */
+.toast {
+  position: fixed;
+  bottom: 220px;
   left: 0;
   right: 0;
-  bottom: 0;
-  transition: 0.3s;
-}
-.slider-display::before {
-  content: "";
-  position: absolute;
-  height: 14px;
-  width: 14px;
-  left: 1px;
-  top: 1px;
-  background-color: white;
-  border-radius: 50%;
-  transition: 0.3s;
-}
-.switch-display input:checked + .slider-display {
-  background-color: #4caf50;
-}
-.switch-display input:checked + .slider-display::before {
-  transform: translateX(14px);
+  margin: auto;
+  width: fit-content;
+  max-width: 80%;
+  background-color: rgba(51, 51, 51, 0.9);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 16px;
+  font-size: 20px;
+  opacity: 0;
+  animation: slideToast 1.5s ease-in-out forwards;
+  z-index: 1000;
 }
 
-/* 入力用スイッチ（下） */
-.switch-input {
-  position: relative;
-  display: inline-block;
-  width: 40px;     /* ← スイッチの幅 */
-  height: 20px;    /* ← スイッチの高さ */
+@keyframes slideToast {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  10% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  90% {
+    opacity: 1;
+    transform: translateX(-10%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
 }
 
-/* チェックボックス自体は非表示に */
-.switch-input input {
-  display: none;
+/* ✅ API使用回数 表示のフォント調整 */
+#apiUsageInfo {
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  font-size: 16px;
+  margin-top: 20px;
+  color: #555;
 }
 
-.slider-input {
-  position: absolute;
-  cursor: pointer;
-  background-color: #ccc;
-  border-radius: 34px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  transition: 0.3s;
-}
+/* ===== ダークモード対応 ===== */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #121212;
+    color: #ffffff;
+  }
 
-.slider-input::before {
-  content: "";
-  position: absolute;
-  height: 16px;
-  width: 16px;
-  left: 2px;
-  top: 2px;
-  background-color: white;
-  border-radius: 50%;
-  transition: 0.3s;
-}
+  #resultBox {
+    background-color: #1e1e1e;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(255, 255, 255, 0.1);
+  }
 
-.switch-input input:checked + .slider-input {
-  background-color: #4caf50;
-}
+  .tab-button {
+    background: linear-gradient(135deg, #444, #333);
+    color: #fff;
+    border: 1px solid #666;
+  }
 
-.switch-input input:checked + .slider-input::before {
-  transform: translateX(20px); /* ← 40px - 16px - padding */
+  .tab-button:hover {
+    background: linear-gradient(135deg, #555, #444);
+  }
+
+  .tab-button.selected {
+    background: linear-gradient(135deg, #FFD600, #FFB300);
+    color: black;
+  }
+
+  #postButton,
+  #distanceButton,
+  #showDistanceByDay {
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+  }
+
+  .toast {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
 }
