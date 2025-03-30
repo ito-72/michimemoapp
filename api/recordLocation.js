@@ -12,22 +12,17 @@ export default async function handler(req, res) {
     return res.status(400).json({ message: "緯度または経度が不足しています" });
   }
 
+  const now = new Date();
+  const month = now.getMonth() + 1;
+  const day = now.getDate();
 
-  // ✅ 日本時間（JST）で正しく日付・時間を取得
-const nowJST = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
-const jstDate = new Date(nowJST);
-
-const month = jstDate.getMonth() + 1;
-const day = jstDate.getDate();
-
-const time = jstDate.toLocaleTimeString("ja-JP", {
-  hour12: false,
-  hour: "2-digit",
-  minute: "2-digit",
-  second: "2-digit"
-});
-
-
+  const time = now.toLocaleString("ja-JP", {
+    timeZone: "Asia/Tokyo",
+    hour12: false,
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  });
 
   const payload = {
     mode: "recordLocation",
