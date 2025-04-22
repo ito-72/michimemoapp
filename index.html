@@ -68,27 +68,33 @@
 
   resultBox.textContent = "送信中..."; // ✅ ここを追加！
 
-  navigator.geolocation.getCurrentPosition(
-    async (pos) => {
-      const lat = pos.coords.latitude;
-      const lng = pos.coords.longitude;
+ navigator.geolocation.getCurrentPosition(
+  async (pos) => {
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
 
-      const res = await fetch("/api/recordLocation", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lat, lng })
-      });
+    const res = await fetch("/api/recordLocation", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ lat, lng })
+    });
 
-      const result = await res.json();
-      resultBox.textContent = `${result.message}`;
+    const result = await res.json();
+    resultBox.textContent = `${result.message}`;
+
+    if (result.message === "すでに送信済みです") {
+      showToast("すでに送信済みです");
+    } else {
       showToast("送信しました");
       updateApiUsageDisplay();
-    },
-    (err) => {
-      resultBox.textContent = `位置情報の取得に失敗: ${err.message}`;
     }
-  );
-});
+  },
+  (err) => {
+    resultBox.textContent = `位置情報の取得に失敗: ${err.message}`;
+    showToast("送信失敗");
+  }
+);
+
 
 
     // ✅ 今週の距離を記載
