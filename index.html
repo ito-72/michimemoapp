@@ -58,35 +58,38 @@
     }
 
     // ✅ 現在地を送信
-    document.getElementById("postButton").addEventListener("click", async () => {
-      const resultBox = document.getElementById("resultBox");
+  document.getElementById("postButton").addEventListener("click", async () => {
+  const resultBox = document.getElementById("resultBox");
 
-      if (!navigator.geolocation) {
-        resultBox.textContent = "このブラウザでは位置情報が使えません。";
-        return;
-      }
+  if (!navigator.geolocation) {
+    resultBox.textContent = "このブラウザでは位置情報が使えません。";
+    return;
+  }
 
-      navigator.geolocation.getCurrentPosition(
-        async (pos) => {
-          const lat = pos.coords.latitude;
-          const lng = pos.coords.longitude;
+  resultBox.textContent = "送信中..."; // ✅ ここを追加！
 
-          const res = await fetch("/api/recordLocation", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ lat, lng })
-          });
+  navigator.geolocation.getCurrentPosition(
+    async (pos) => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
 
-          const result = await res.json();
-          resultBox.textContent = `${result.message}`;
-          showToast("送信しました");
-          updateApiUsageDisplay();
-        },
-        (err) => {
-          resultBox.textContent = `位置情報の取得に失敗: ${err.message}`;
-        }
-      );
-    });
+      const res = await fetch("/api/recordLocation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lat, lng })
+      });
+
+      const result = await res.json();
+      resultBox.textContent = `${result.message}`;
+      showToast("送信しました");
+      updateApiUsageDisplay();
+    },
+    (err) => {
+      resultBox.textContent = `位置情報の取得に失敗: ${err.message}`;
+    }
+  );
+});
+
 
     // ✅ 今週の距離を記載
     document.getElementById("distanceButton").addEventListener("click", async () => {
