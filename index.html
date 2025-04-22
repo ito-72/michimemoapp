@@ -12,29 +12,17 @@
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
   <link rel="manifest" href="/manifest.json">
-<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
-<link rel="apple-touch-icon" href="/icon-192.png">
-
-
-
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
+  <link rel="apple-touch-icon" href="/icon-192.png">
 </head>
 
 <body>
-  <!-- ✅ フッター固定の現在地送信ボタン -->
   <button id="postButton" class="floating-circle-button">現在地<br>送信</button>
-
-  <!-- ✅ 結果表示ボックス -->
   <div id="resultBox">ここに結果が表示されます</div>
-
-  <!-- ✅ 残りのボタンたち -->
   <button id="distanceButton">今週の距離を記載</button>
   <button id="showDistanceByDay">該当日の距離を表示</button>
-
-  <!-- ✅ API使用状況表示 -->
   <div id="apiUsageInfo">API使用状況を取得中...</div>
 
-  <!-- ✅ タブエリア -->
   <div id="tabArea">
     <div id="yearTabs" class="tab-group"></div>
     <div id="monthTabs" class="tab-group"></div>
@@ -48,7 +36,6 @@
     let selectedMonth = null;
     let selectedPeriod = null;
 
-    // ✅ トースト通知
     function showToast(message) {
       const toast = document.createElement("div");
       toast.className = "toast";
@@ -58,44 +45,43 @@
     }
 
     // ✅ 現在地を送信
-  document.getElementById("postButton").addEventListener("click", async () => {
-  const resultBox = document.getElementById("resultBox");
+    document.getElementById("postButton").addEventListener("click", async () => {
+      const resultBox = document.getElementById("resultBox");
 
-  if (!navigator.geolocation) {
-    resultBox.textContent = "このブラウザでは位置情報が使えません。";
-    return;
-  }
+      if (!navigator.geolocation) {
+        resultBox.textContent = "このブラウザでは位置情報が使えません。";
+        return;
+      }
 
-  resultBox.textContent = "送信中..."; // ✅ ここを追加！
+      resultBox.textContent = "送信中...";
 
- navigator.geolocation.getCurrentPosition(
-  async (pos) => {
-    const lat = pos.coords.latitude;
-    const lng = pos.coords.longitude;
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
 
-    const res = await fetch("/api/recordLocation", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ lat, lng })
+          const res = await fetch("/api/recordLocation", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ lat, lng })
+          });
+
+          const result = await res.json();
+          resultBox.textContent = `${result.message}`;
+
+          if (result.message === "すでに送信済みです") {
+            showToast("すでに送信済みです");
+          } else {
+            showToast("送信しました");
+            updateApiUsageDisplay();
+          }
+        },
+        (err) => {
+          resultBox.textContent = `位置情報の取得に失敗: ${err.message}`;
+          showToast("送信失敗");
+        }
+      );
     });
-
-    const result = await res.json();
-    resultBox.textContent = `${result.message}`;
-
-    if (result.message === "すでに送信済みです") {
-      showToast("すでに送信済みです");
-    } else {
-      showToast("送信しました");
-      updateApiUsageDisplay();
-    }
-  },
-  (err) => {
-    resultBox.textContent = `位置情報の取得に失敗: ${err.message}`;
-    showToast("送信失敗");
-  }
-);
-
-
 
     // ✅ 今週の距離を記載
     document.getElementById("distanceButton").addEventListener("click", async () => {
@@ -111,7 +97,7 @@
       updateApiUsageDisplay();
     });
 
-    // ✅ 日タブの生成と表示
+    // ✅ 日タブの生成と表示（省略せず全体維持）
     document.getElementById("showDistanceByDay").addEventListener("click", async () => {
       const resultBox = document.getElementById("resultBox");
       resultBox.textContent = "シート一覧を取得中...";
