@@ -290,8 +290,10 @@
       const distanceResult = await distanceRes.json();
       const totalKm = distanceResult.total;
 
-      const liters = totalKm / FUEL_EFFICIENCY;
-      const cost = Math.round(liters * price);
+      // 小数第3位で丸めたリットル数にしてから計算
+const liters = Math.round((totalKm / FUEL_EFFICIENCY) * 1000) / 1000;
+const cost = Math.round(liters * price);
+
 
       resultBox.textContent = `${selectedYear}年${selectedMonth}月の走行距離：${totalKm} km\nガソリン代：約 ${cost} 円`;
       showToast(`ガソリン代：${cost}円`);
