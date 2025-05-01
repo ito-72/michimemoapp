@@ -21,6 +21,7 @@
   <div id="resultBox">ここに結果が表示されます</div>
   <button id="distanceButton">今週の距離を記載</button>
   <button id="showDistanceByDay">該当日の距離を表示</button>
+  <button id="calcGasolineCost">ガソリン代を計算</button>
   <div id="apiUsageInfo">API使用状況を取得中...</div>
 
   <div id="tabArea">
@@ -237,6 +238,80 @@
     }
 
     window.onload = updateApiUsageDisplay;
+
+    <script>
+  // ✅ タント燃費（km/L）
+  const FUEL_EFFICIENCY = 20;
+
+  // ✅ ガソリン代計算ボタン押下時
+  document.getElementById("calcGasolineCost").addEventListener("click", async () => {
+    const resultBox = document.getElementById("resultBox");
+    resultBox.textContent = "シート一覧を取得中...";
+
+    try {
+      const res = await fetch("/api/getSheetNames", { method: "POST" });
+      const result = await res.json();
+      const sheetData = result.sheetNames;
+
+      // 年の一覧を取得
+      const years = [...new Set(
+        sheetData.map(name => name.match(/^(\d{4})年/)).filter(Boolean).map(match => match[1])
+      )];
+
+      const selectedYear = await showSelectPrompt("年を選択", years);
+      if (!selectedYear) return;
+
+      const months = [...new Set(
+        sheetData
+          .filter(name => name.startsWith(`${selectedYear}年`))
+          .map(name => {
+            const m = name.match(/(\d{1,2})月/);
+            return m ? m[1] : null;
+          })
+          .filter(Boolean)
+      )];
+
+      const selectedMonth = await showSelectPrompt("月を選択", months);
+      if (!selectedMonth) return;
+
+      const priceStr = prompt("今月のガソリン平均単価はいくらですか？（円/L）", "170");
+      const price = Number(priceStr);
+      if (!price || isNaN(price)) {
+        showToast("数値で入力してください");
+        return;
+      }
+
+      // 距離取得
+      const distanceRes = await fetch("/api/getTotalDistanceForMonth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ year: Number(selectedYear), month: Number(selectedMonth) })
+      });
+
+      const distanceResult = await distanceRes.json();
+      const totalKm = distanceResult.total;
+
+      const liters = totalKm / FUEL_EFFICIENCY;
+      const cost = Math.round(liters * price);
+
+      resultBox.textContent = `${selectedYear}年${selectedMonth}月の走行距離：${totalKm} km\nガソリン代：約 ${cost} 円`;
+      showToast(`ガソリン代：${cost}円`);
+
+    } catch (err) {
+      console.error("ガソリン代計算エラー:", err);
+      resultBox.textContent = "ガソリン代の計算に失敗しました";
+    }
+  });
+
+  // ✅ プロンプトで選択肢を出す関数（簡易UI）
+  async function showSelectPrompt(title, options) {
+    const msg = `${title}：\n` + options.map((opt, i) => `${i + 1}. ${opt}`).join("\n");
+    const input = prompt(msg);
+    const index = Number(input) - 1;
+    return options[index] ?? null;
+  }
+</script>
+
   </script>
 </body>
 </html>
